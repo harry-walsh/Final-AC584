@@ -1,0 +1,135 @@
+---
+title: "Report"
+subtitle: "Exploring relationships between basic water usage, Hep-B vaccine availability, population and life expectancy"
+author: "Harry Walsh"
+date: 04/12/2024
+format: html
+toc: true
+theme: minty
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+# libraries
+library(tidyverse)
+library(plotly)
+library(dplyr)
+
+#data
+unicef_indicator_1_2_ <- read_csv("C:/Users/Home/OneDrive/Desktop/Quarto/unicef_indicator_1 (2).csv")
+unicef_indicator_2_2_ <- read_csv("C:/Users/Home/OneDrive/Desktop/Quarto/unicef_indicator_2 (2).csv")
+unicef_metadata_2_ <- read_csv("C:/Users/Home/OneDrive/Desktop/Quarto/unicef_metadata (2).csv")
+```
+
+## Introduction
+- Welcome to my Quarto Document. In this document, I will display a series of different **maps** and *charts*.
+- For each **map** & *chart*, I will outline the information that is contained in the graphic.
+
+## Excel File Number 1
+The first excel file that I was given was titled ***unicef_indicator1***. The data being displayed was *"Proportion of population using basic drinking water services"*. This excel file had this data, as a %, for each country in the world, for each year. The time period ranged from **2000 to 2022**.
+
+## Excel File Number 2
+The second excel file that I was given was titled ***unicef_indicator2***. The data being displayed was *"Percentage of live births who received hepatitis-B-containing vaccine within 24 hours of birth"*. This excel file also had this data, as a %, for each country in the world, for each year. The time period ranged from **1960 to 2022**.
+
+## Excel File Number 3
+The third and final excel file that I was given was titled ***unicef_metadata***. This excel file was different to that of the above. There were a number of key metrics being displayed here including:
+- Country
+- Year (from 1960 - 2022)
+- Population
+- GNI (current US$)
+- Life Expectancy
+
+
+## World Map Chart
+For my first visualisation, I designed a world map chart. I graphed the **Proportion of population using basic drinking water services**. From my graph, we can see which country has a high and low %, based off the colour their country is highlighted in.
+
+```{r}
+#| fig-cap: "World Map showing the Proportion of Population Using Basic Drinking Water Services - from 0% (dark blue) to 100% (light blue)"
+map_world <- map_data("world")
+map_data_join <- full_join(unicef_indicator_1_2_, map_world, by = c("country" = "region"))
+ggplot(map_data_join) +
+  aes(x = long, y = lat, group = group, fill = obs_value) +
+  geom_polygon() +
+  labs(
+    main = "XYZ",
+    x = "Longitude",
+    y = "Latitude",
+    fill = "% of 
+    pop. 
+    using 
+    basic 
+    water 
+    services") +
+  theme_classic()
+```
+
+
+## Time Series Chart
+For my time series chart, I decided to focus on my home country - *Ireland*. I graphed the Proportion of population using basic drinking water services, in Ireland, from the year 2000, to 2022. It is evident from my graph, that this % took a ***sharp decline*** between the years 2005 to 2010. and has remained low ever since.
+
+
+```{r}
+#| fig-cap: "Proportion of Population Using Basic Drinking Water Services, in Ireland, from 2000 to 2022"
+unicef_indicator_1_2_ %>%
+  filter(country == "Ireland") %>%
+  ggplot(aes(time_period, obs_value, color = country)) +
+  geom_line() +
+  theme_light() +
+  labs(
+    x = "Years",
+    y = "% of pop. using basic water services"
+  )
+```
+
+
+
+## Bar Chart
+For my bar chart, I decided to filter my data. I graphed the ***Percentage of live births who received hepatitis-B-containing vaccine within 24 hours of birth***, in *Afghanistan, Albania, Algeria, Andorra and Argentina*. It is evident from my graph, that the % for each country differs quiet a lot - take a look for yourself!
+
+```{r}
+ggplot(unicef_indicator_2_2_) +
+  aes(country2, value2, fill = "Red") +
+  geom_col() +
+  labs(
+    x = "Country",
+    y = "% of live births who received Hep-B vaccine",
+    fill = "% of 
+    Live 
+    Births 
+    that 
+    Recieved 
+    Hep-B 
+    Vaccines") +
+  theme_light()
+```
+
+## Scatter Plot
+For my scatter-plot, I decided to again filter my data, choosing the countries *Afghanistan, Bhutan, Ireland, Albania, Peru, Spain*. I graphed the ***Life Expectancy vs Population***, of these chosen countries. From my graph, we can again see that the point for each country differs quiet a lot.
+
+```{r}
+#| fig-cap: "A scatter-plot mapping population and life expectancy of Afghanistan, Bhutan, Ireland, Albania, Peru and Spain. (Note: options(scipen = 999) was not used as the numbers wouldve layered on eachother)"
+ggplot(unicef_metadata_2_) +
+  aes(pop1, life.exp, fill = "Countries -
+      Afghanistan,
+      Bhutan,
+      Ireland,
+      Albania,
+      Peru,
+      Spain,") +
+  geom_point() +
+  labs(
+    x = "Population",
+    y = "Life Expectancy") +
+  theme_dark()
+```
+
+
+## Conclusion
+I feel as though it is our duty to fight these issues to our world leaders and raise more awareness.
+I have you have enjoyed my document, and it gave you an insight into some of the issues our world faces. ***Thank You***.
